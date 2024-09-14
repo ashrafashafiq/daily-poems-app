@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Poems</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .poem-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .poem-body {
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        .poem-line {
+            margin-bottom: 15px;
+        }
+        .ur {
+            direction: rtl;
+            font-size: 20px;
+            color: darkblue;
+            display: block;
+        }
+        .en {
+            font-size: 16px;
+            color: darkgreen;
+            display: block;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        // Function to fetch a new random poem
+        function getRandomPoem() {
+            fetch('/random_poem')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('poem-title-ur').innerText = data.title_ur;
+                    document.getElementById('poem-title-en').innerText = data.title_en;
+                    
+                    let poemBody = document.getElementById('poem-body');
+                    poemBody.innerHTML = '';
+                    data.poem_body.forEach(line => {
+                        poemBody.innerHTML += `
+                            <div class="poem-line">
+                                <span class="ur">${line.ur}</span>
+                                <span class="en">${line.en}</span>
+                            </div>
+                        `;
+                    });
+                });
+        }
+
+        // Load a random poem on page load
+        window.onload = getRandomPoem;
+    </script>
+</head>
+<body>
+    <h1>Daily Iqbal Poem</h1>
+    
+    <div class="poem-title">
+        <span id="poem-title-ur" class="ur"></span> | 
+        <span id="poem-title-en" class="en"></span>
+    </div>
+
+    <div id="poem-body" class="poem-body"></div>
+
+    <!-- Button to get a new random poem -->
+    <button onclick="getRandomPoem()">Get Another Random Poem</button>
+</body>
+</html>
